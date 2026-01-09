@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عجلة العملات الرقمية</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #cf1919;
+            color: #fff;
+            text-align: center;
+        }
+
+        header {
+            background: #131212;
+            padding: 15px;
+        }
+
+        nav a {
+            color: #ffc107;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #pointer {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid red;
+            margin: 0 auto 15px;
+        }
+
+        #wheel {
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            border: 10px solid #ffc107;
+            margin: auto;
+            position: relative;
+            transition: transform 5s ease-out;
+        }
+
+        .segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            text-align: right;
+            padding-right: 15px;
+            box-sizing: border-box;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 12px 35px;
+            font-size: 20px;
+            background: #ffc107;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:disabled {
+            background: #777;
+            cursor: not-allowed;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            color: #00ffcc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Login</a>
+            <a href="#">Register</a>
+        </nav>
+    </header>
+    <h1>🎯 عجلة ربح العملات الرقمية</h1>
+
+    <div id="pointer"></div>
+
+    <div id="wheel">
+        <div class="segment" style="transform: rotate(0deg);"> 1000 DOGE</div>
+        <div class="segment" style="transform: rotate(45deg);"> 2500 DOGE</div>
+        <div class="segment" style="transform: rotate(90deg);">3000 DOGE</div>
+        <div class="segment" style="transform: rotate(135deg);">4500 DOGE</div>
+        <div class="segment" style="transform: rotate(180deg);">5000 DOGE</div>
+        <div class="segment" style="transform: rotate(225deg);">6000 DOGE</div>
+        <div class="segment" style="transform: rotate(270deg);">50000 DOGE</div>
+        <div class="segment" style="transform: rotate(315deg);">Lose</div>
+    </div>
+
+    <h2></h2>
+    <button onclick="spin()">إدارة العجلة</button>
+    <p id="spinResult"></p>
+    <div id="result"></div>
+
+    <script>
+        let spinning = false;
+
+        function spinWheel() {
+            // إذا كان الدوران جاري، لا يعمل الزر
+            if (spinning) return;
+
+            spinning = true;
+
+            const btn = document.getElementById("spinBtn");
+            btn.disabled = true;
+            btn.innerText = "⏳ جاري الدوران...";
+
+            const wheel = document.getElementById("wheel");
+
+            const prizes = [
+                "1000 DOGE",
+                "2500 DOGE",
+                "819 DOGE",
+
+                "Lose"
+            ];
+
+            // دوران عشوائي
+            const randomDeg = Math.floor(Math.random() * 3600) + 360;
+            wheel.style.transform = `rotate(${randomDeg}deg)`;
+
+            // وقت الانتظار حتى انتهاء الدوران
+            setTimeout(() => {
+                const degree = randomDeg % 360;
+                const index = Math.floor(degree / (360 / prizes.length));
+
+                document.getElementById("result").innerText = "🎉 النتيجة: " + prizes[index];
+
+                // إعادة تفعيل الزر بعد نهاية الدوران
+                btn.disabled = false;
+                btn.innerText = "إدارة العجلة";
+                spinning = false;
+
+            }, 5000); // هنا مدة دوران العجلة = 5 ثواني
+
+            <head>
+                <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>عجلة العملات + PayPal</title>
+                    </head>
+
+                    <body>
+                        <h2>تسجيل دخول / تسجيل</h2>
+
+                        <input id="email" placeholder="الإيميل">
+                            <input id="password" placeholder="كلمة المرور" type="password">
+                                <button onclick="register()">تسجيل</button>
+                                <button onclick="login()">دخول</button>
+
+                                <hr>
+
+                                    <p id="spinResult"></p>
+
+                                    <hr>
+
+                                        <h2>سحب PayPal</h2>
+                                        <input id="paypalEmail" placeholder="PayPal Email">
+                                            <input id="withdrawAmount" placeholder="المبلغ USD">
+                                                <button onclick="withdraw()">سحب</button>
+                                                <p id="withdrawResult"></p>
+
+                                                <script>
+                                                    let token = null;
+
+                                                    async function register() {
+                const res = await fetch("/register", {
+                                                        method: "POST",
+                                                    headers: {"Content-Type": "application/json" },
+                                                    body: JSON.stringify({email: document.getElementById("email").value, password: document.getElementById("password").value })
+                });
+                                                    alert("تم التسجيل");
+            }
+
+                                                    async function login() {
+                const res = await fetch("/login", {
+                                                        method: "POST",
+                                                    headers: {"Content-Type": "application/json" },
+                                                    body: JSON.stringify({email: document.getElementById("email").value, password: document.getElementById("password").value })
+                });
+                                                    const data = await res.json();
+                                                    token = data.token;
+                                                    alert("تم الدخول. النقاط: " + data.points);
+            }
+
+                                                    async function spin() {
+                if (!token) {alert("سجل دخول أولاً"); return; }
+                                                    const prizes = ["1000", "2500", "3000", "4500", "5000", "6000", "50000", "0"];
+                                                    const won = prizes[Math.floor(Math.random() * prizes.length)];
+                                                    document.getElementById("spinResult").innerText = "ربحت: " + won;
+                                                    await fetch("/addPoints", {
+                                                        method: "POST",
+                                                    headers: {
+                                                        "Authorization": "Bearer " + token,
+                                                    "Content-Type": "application/json"
+                    },
+                                                    body: JSON.stringify({points: parseInt(won) })
+                });
+            }
+
+                                                    async function withdraw() {
+                if (!token) {alert("سجل دخول"); return; }
+                                                    const email = document.getElementById("paypalEmail").value;
+                                                    const amount = document.getElementById("withdrawAmount").value;
+                                                    const res = await fetch("/withdraw", {
+                                                        method: "POST",
+                                                    headers: {
+                                                        "Authorization": "Bearer " + token,
+                                                    "Content-Type": "application/json"
+                    },
+                                                    body: JSON.stringify({paypalEmail: email, amount })
+                });
+                                                    const data = await res.json();
+                                                    document.getElementById("withdrawResult").innerText = JSON.stringify(data);
+            }
+    </script>
+
+</body>
+</script>
+
+
+
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عجلة العملات + PayPal</title>
+</head>
+
+<body>
+    <h2>تسجيل دخول / تسجيل</h2>
+
+    <input id="email" placeholder="الإيميل">
+    <input id="password" placeholder="كلمة المرور" type="password">
+    <button onclick="register()">تسجيل</button>
+    <button onclick="login()">دخول</button>
+
+    <hr>
+
+
+
+    <hr>
+
+    <h2>سحب PayPal</h2>
+    <input id="paypalEmail" placeholder="PayPal Email">
+    <input id="withdrawAmount" placeholder="المبلغ USD">
+    <button onclick="withdraw()">سحب</button>
+    <p id="withdrawResult"></p>
+
+    <script>
+                                                    let token = null;
+
+                                                    async function register(){
+  const res = await fetch("/register", {
+                                                        method:"POST",
+                                                    headers:{"Content-Type":"application/json"},
+                                                    body:JSON.stringify({email: document.getElementById("email").value, password: document.getElementById("password").value })
+  });
+                                                    alert("تم التسجيل");
+}
+
+                                                    async function login(){
+  const res = await fetch("/login", {
+                                                        method:"POST",
+                                                    headers:{"Content-Type":"application/json"},
+                                                    body:JSON.stringify({email: document.getElementById("email").value, password: document.getElementById("password").value })
+  });
+                                                    const data = await res.json();
+                                                    token = data.token;
+                                                    alert("تم الدخول. النقاط: "+data.points);
+}
+
+                                                    async function spin(){
+  if(!token){alert("سجل دخول أولاً"); return; }
+                                                    const prizes = ["1000", "2500", "3000", "4500", "5000", "6000", "50000", "0"];
+                                                    const won = prizes[Math.floor(Math.random()*prizes.length)];
+                                                    document.getElementById("spinResult").innerText = "ربحت: "+won;
+                                                    await fetch("/addPoints", {
+                                                        method:"POST",
+                                                    headers:{
+                                                        "Authorization": "Bearer "+token,
+                                                    "Content-Type":"application/json"
+    },
+                                                    body:JSON.stringify({points: parseInt(won) })
+  });
+}
+
+                                                    async function withdraw(){
+  if(!token){alert("سجل دخول"); return; }
+                                                    const email = document.getElementById("paypalEmail").value;
+                                                    const amount = document.getElementById("withdrawAmount").value;
+                                                    const res = await fetch("/withdraw", {
+                                                        method:"POST",
+                                                    headers:{
+                                                        "Authorization":"Bearer "+token,
+                                                    "Content-Type":"application/json"
+    },
+                                                    body:JSON.stringify({paypalEmail: email, amount })
+  });
+                                                    const data = await res.json();
+                                                    document.getElementById("withdrawResult").innerText = JSON.stringify(data);
+}
+    </script>
+
+</body>
+
+</html>
+<p class="mb-0">©2026 عجلة أرباح. .</p>
