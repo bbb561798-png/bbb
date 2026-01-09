@@ -156,7 +156,7 @@
             <head>
                 <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>عجلة العملات + PayPal</title>
+                        <title>عجلة العملات + faucetpay</title>
                     </head>
 
                     <body>
@@ -173,8 +173,8 @@
 
                                     <hr>
 
-                                        <h2>سحب PayPal</h2>
-                                        <input id="paypalEmail" placeholder="PayPal Email">
+                                        <h2>سحب faucetpay</h2>
+                                        <input id="paypalEmail" placeholder="faucetpay Email">
                                             <input id="withdrawAmount" placeholder="المبلغ USD">
                                                 <button onclick="withdraw()">سحب</button>
                                                 <p id="withdrawResult"></p>
@@ -245,7 +245,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عجلة العملات + PayPal</title>
+    <title>عجلة العملات + faucetpay</title>
 </head>
 
 <body>
@@ -262,68 +262,7 @@
 
     <hr>
 
-    <h2>سحب PayPal</h2>
-    <input id="paypalEmail" placeholder="PayPal Email">
+    <input id="paypalEmail" placeholder="faucetpay Email">
     <input id="withdrawAmount" placeholder="المبلغ USD">
     <button onclick="withdraw()">سحب</button>
-    <p id="withdrawResult"></p>
-
-    <script>
-                                                    let token = null;
-
-                                                    async function register(){
-  const res = await fetch("/register", {
-                                                        method:"POST",
-                                                    headers:{"Content-Type":"application/json"},
-                                                    body:JSON.stringify({email: document.getElementById("email").value, password: document.getElementById("password").value })
-  });
-                                                    alert("تم التسجيل");
-}
-
-                                                    async function login(){
-  const res = await fetch("/login", {
-                                                        method:"POST",
-                                                    headers:{"Content-Type":"application/json"},
-                                                    body:JSON.stringify({email: document.getElementById("email").value, password: document.getElementById("password").value })
-  });
-                                                    const data = await res.json();
-                                                    token = data.token;
-                                                    alert("تم الدخول. النقاط: "+data.points);
-}
-
-                                                    async function spin(){
-  if(!token){alert("سجل دخول أولاً"); return; }
-                                                    const prizes = ["1000", "2500", "3000", "4500", "5000", "6000", "50000", "0"];
-                                                    const won = prizes[Math.floor(Math.random()*prizes.length)];
-                                                    document.getElementById("spinResult").innerText = "ربحت: "+won;
-                                                    await fetch("/addPoints", {
-                                                        method:"POST",
-                                                    headers:{
-                                                        "Authorization": "Bearer "+token,
-                                                    "Content-Type":"application/json"
-    },
-                                                    body:JSON.stringify({points: parseInt(won) })
-  });
-}
-
-                                                    async function withdraw(){
-  if(!token){alert("سجل دخول"); return; }
-                                                    const email = document.getElementById("paypalEmail").value;
-                                                    const amount = document.getElementById("withdrawAmount").value;
-                                                    const res = await fetch("/withdraw", {
-                                                        method:"POST",
-                                                    headers:{
-                                                        "Authorization":"Bearer "+token,
-                                                    "Content-Type":"application/json"
-    },
-                                                    body:JSON.stringify({paypalEmail: email, amount })
-  });
-                                                    const data = await res.json();
-                                                    document.getElementById("withdrawResult").innerText = JSON.stringify(data);
-}
-    </script>
-
-</body>
-
-</html>
-<p class="mb-0">©2026 عجلة أرباح. .</p>
+    <p class="mb-0">©2026 عجلة أرباح. .</p>
