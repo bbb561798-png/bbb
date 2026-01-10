@@ -1,0 +1,242 @@
+// إعدادات الفوسيت
+const claimAmount = 0.0001; // كمية العملة الممنوحة لكل مطالبة
+const claimInterval = 3600; // فترة الانتظار بالثواني (ساعة)
+
+// تحميل آخر وقت مطالبة من التخزين المحلي
+function getLastClaimTime() {
+  return localStorage.getItem('lastClaimTime') || 0;
+}
+// حفظ وقت المطالبة الحالي
+function setLastClaimTime(time) {
+  localStorage.setItem('lastClaimTime', time);
+}
+// حساب الوقت المتبقي للمطالبة القادمة بالثواني
+function getTimeRemaining() {
+  const lastClaim = parseInt(getLastClaimTime());
+  const now = Math.floor(Date.now() / 1000);
+  const diff = claimInterval - (now - lastClaim);
+  return diff > 0 ? diff : 0;
+}
+// تحديث واجهة المستخدم
+function updateUI() {
+  const button = document.getElementById('claimButton');
+  const message = document.getElementById('message');
+  const balanceElem = document.getElementById('balance');
+
+  let balance = parseFloat(localStorage.getItem('balance')) || 0;
+  balanceElem.textContent = balance.toFixed(6);
+
+  const timeRemaining = getTimeRemaining();
+  if (timeRemaining > 0) {
+    button.disabled = true;
+    message.textContent = `عليك الانتظار ${timeRemaining
+    } ثانية قبل المطالبة مرة أخرى.`;
+  } else {
+    button.disabled = false;
+    message.textContent = 'يمكنك المطالبة الآن!';
+  }
+}
+// عند الضغط على زر المطالبة
+function claim() {
+  if (getTimeRemaining() === 0) {
+    let balance = parseFloat(localStorage.getItem('balance')) || 0;
+    balance += claimAmount;
+    localStorage.setItem('balance', balance);
+    setLastClaimTime(Math.floor(Date.now() / 1000));
+    alert(`تم منحك <span class="math-inline" data-latex="%7BclaimAmount%7D%20%D8%B9%D9%85%D9%84%D8%A9!%20%D8%B1%D8%B5%D9%8A%D8%AF%D9%83%20%D8%A7%D9%84%D8%A2%D9%86%3A">{claimAmount
+    } عملة! رصيدك الآن:</span>{balance.toFixed(6)
+    }`);
+    updateUI();
+  } else {
+    alert('عليك الانتظار قليلاً قبل المطالبة مرة أخرى.');
+  }
+}
+// تهيئة الصفحة عند التحميل
+window.onload = function() {
+  updateUI();
+  document.getElementById('claimButton').addEventListener('click', claim);
+
+  // تحديث العد التنازلي كل ثانية
+  setInterval(updateUI,
+  1000);
+};
+{
+  // Place your snippets for javascript here. Each snippet is defined under a snippet name and has a prefix, body and 
+  // description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+  // same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+}
+const wheel = document.getElementById("wheel");
+const resultDisplay = document.getElementById("result");
+
+function spin() {
+  resultDisplay.textContent = ""; // يمسح النتيجة القديمة
+  const randomDegree = Math.random() * 360 + 3600; // يدوّر بشكل عشوائي مع لفات كثيرة
+  wheel.style.transition = "transform 4s ease-out"; // مدة وسرعة الدوران
+  wheel.style.transform = `rotate(${randomDegree
+  }deg)`; // يدوّر العجلة
+
+  setTimeout(() => {
+    const actualDegree = randomDegree % 360;
+    const segmentSize = 360 / prizes.length;
+    const index = Math.floor((360 - actualDegree) / segmentSize) % prizes.length;
+    resultDisplay.textContent = "🎉 حصلت على: " + prizes[index
+    ]; // يكتب النتيجة
+  },
+  4000); // نفس مدة التحريك حتى تطلع النتيجة بعد التوقف
+}
+// خـلايا النتائج اللي في العجلة
+const prizes = [
+  "DOGE 1000 نقاط",
+  "DOGE 15000 نقاط",
+  "DOGE 20000 نقاط",
+  "DOGE 1000 نقاط",
+  "DOGE 15000 نقاط",
+  "DOGE 20000 نقاط"
+];
+
+// العنصر اللي فيه العجلة
+const wheel = document.getElementById("wheel");
+// العنصر اللي بيظهر النتيجة
+const resultDisplay = document.getElementById("result");
+// زر الدوران
+const spinButton = document.getElementById("spinButton");
+
+// لما تدوس الزر
+spinButton.addEventListener("click", function() {
+  // نمنع الضغط المتكرر أثناء الدوران
+  spinButton.disabled = true;
+
+  // نختار زاوية عشوائية + لفات (له تأثير حركة حقيقية)
+  const randomDegree = Math.random() * 360 + 3600; // 10 لفات تقريبًا
+  wheel.style.transition = "transform 4s ease-out"; // مدة الدوران
+  wheel.style.transform = `rotate(${randomDegree
+  }deg)`; // ندوّر العجلة
+
+  // بعد انتهاء الدوران نحسب النتيجة
+  setTimeout(() => {
+    const actual = randomDegree % 360;
+    const segmentSize = 360 / prizes.length;
+    const index = Math.floor((360 - actual) / segmentSize) % prizes.length;
+
+    resultDisplay.textContent = "🎉 حصلت على: " + prizes[index
+    ];
+    spinButton.disabled = false; // نفعّل الزر تاني
+  },
+  4000); // نفس مدة التحريك (4s)
+});
+ 
+// استيراد المكتبة
+const { API
+} = require("faucetpayjs");
+
+// ضع مفتاح الـ API اللي حصلت عليه من حساب FaucetPay
+const faucetPay = new API("YOUR_FAUCETPAY_API_KEY");
+
+// مثال: جلب رصيد حساب FaucetPay
+async function getBalance() {
+  const res = await faucetPay.getBalance("DOGE"); // عملة DOGE
+  console.log("Balance:", res);
+}
+// مثال: إرسال نقاط DOGE لمستخدم
+async function sendDOGE(toAddress, amount) {
+  try {
+    const res = await faucetPay.send(
+      amount, // الكمية بالوحدات (مثلاً "100000" = 100000 ساتوشي)
+      toAddress, // العنوان أو البريد الفوستاير للمستلم
+    "DOGE" // العملة
+    );
+    console.log("Send result:", res);
+  } catch (err) {
+    console.error("Error sending:", err);
+  }
+}
+// استخدام الدالتين كمثال
+getBalance(); // يشوف رصيدك في FaucetPay
+sendDOGE("TARGET_ADDRESS_OR_EMAIL",
+100000); // يرسل 100000 ساتوشي DOGE
+
+
+
+// 1. استيراد المكتبة
+const { API
+} = require("faucetpayjs");
+
+// 2. اضف API Key الخاص بحسابك في FaucetPay
+const faucetPay = new API("YOUR_FAUCETPAY_API_KEY");
+
+// 3. الدالة لإرسال DOGE لـ FaucetPay
+async function sendDOGEtoFaucetPay(emailOrAddress, amount) {
+  try {
+    // amount تكون بالـ satoshi — مثال 1000 satoshi
+    const response = await faucetPay.send(amount, emailOrAddress,
+    "DOGE");
+    console.log("📤 إرسال تم:", response);
+    return response;
+  } catch (err) {
+    console.error("💥 خطأ في الإرسال:", err);
+    throw err;
+  }
+}
+// مثال استخدام الدالة
+// emailOrAddress: ممكن يكون الايميل اللي المستخدم دخّله في موقعك
+// amount: عدد satoshi (مثلاً 1000)
+sendDOGEtoFaucetPay("user@example.com",
+1000)
+  .then(r => console.log("تم الإرسال بنجاح"))
+  .catch(e => console.error("فشل الإرسال"));
+
+
+
+
+
+// backend/index.js
+const express = require("express");
+const { API
+} = require("faucetpayjs"); // مكتبة API الخاصة بـ FaucetPay
+const bodyParser = require("body-parser");
+
+const app = express();
+app.use(bodyParser.json());
+
+// ضع مفتاح API الخاص بك من لوحة FaucetPay
+const faucetpay = new API("YOUR_FAUCETPAY_API_KEY");
+
+// نقطة النهاية اللي يستدعيها الـ frontend
+app.post("/api/send-faucetpay", async (req, res) => {
+    try {
+        const { email, reward
+    } = req.body;
+        if (!email || !reward) {
+            return res.json({ message: "ادخل ايميل وكمية نقاط صحيحة"
+      });
+    }
+    // amount تكون بالـ satoshi (1000 نقطة = 1000 satoshi)
+        const response = await faucetpay.send(reward, email,
+    "DOGE");
+
+        if (response.status === 200) {
+            res.json({ message: "🎉 تم ارسال " + reward + " DOGE إلى " + email
+      });
+    } else {
+            res.json({ message: "🚫 فشل الإرسال: " + response.message
+      });
+    }
+  } catch (error) {
+        res.json({ message: "💥 خطأ في الخادم"
+    });
+  }
+});
+
+// شغل الخادم على بورت 3000
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+

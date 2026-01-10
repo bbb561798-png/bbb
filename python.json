@@ -1,0 +1,74 @@
+<?php
+session_start();
+
+// إعدادات الفوسيت
+$claimAmount = 0.001; // كمية العملة التي تُمنح لكل طلب
+$claimInterval = 3600; // فترة الانتظار بالثواني (ساعة)
+
+// محاكاة رصيد المستخدم (في الواقع يجب ربطه بقاعدة بيانات)
+if (!isset($_SESSION['balance'
+])) {
+    $_SESSION['balance'
+	] = 0;
+}
+// التحقق من آخر مرة تم فيها المطالبة
+if (!isset($_SESSION['last_claim_time'
+])) {
+    $_SESSION['last_claim_time'
+	] = 0;
+}
+
+$currentTime = time();
+$timeSinceLastClaim = $currentTime - $_SESSION['last_claim_time'
+];
+
+if ($_SERVER['REQUEST_METHOD'
+] === 'POST') {
+    if ($timeSinceLastClaim >= $claimInterval) {
+		// منح العملة
+        $_SESSION['balance'
+		] += $claimAmount;
+        $_SESSION['last_claim_time'
+		] = $currentTime;
+        $message = "تم منحك $claimAmount عملة. رصيدك الآن: " . $_SESSION['balance'
+		];
+	} else {
+        $waitTime = $claimInterval - $timeSinceLastClaim;
+        $message = "عليك الانتظار $waitTime ثانية قبل المطالبة مرة أخرى.";
+	}
+}
+?>
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8" />
+    <title>فوسيت عملات رقمية بسيط</title>
+</head>
+<body>
+    <h1>فوسيت عملات رقمية</h1>
+    <p>رصيدك الحالي: <?php echo $_SESSION['balance'
+]; ?></p>
+    <?php if (isset($message)): ?>
+        <p><?php echo $message; ?></p>
+    <?php endif; ?>
+    <form method="post">
+        <button type="submit">اطلب عملة مجانية</button>
+    </form>
+</body>
+</html>
+{
+	// Place your snippets for python here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+}
