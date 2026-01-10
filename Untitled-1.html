@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>تسجيل الدخول والتسجيل - Vie Faucet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            padding: 30px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #3eb081;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #a0cbb3;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 16px;
+            color: red;
+        }
+
+        h2 {
+            color: #3eb081;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>تسجيل مستخدم جديد</h2>
+    <input type="text" id="regUsername" placeholder="اسم المستخدم" />
+    <input type="password" id="regPassword" placeholder="كلمة المرور" />
+    <button id="registerBtn">تسجيل</button>
+    <p class="message" id="regMessage"></p>
+
+    <hr>
+
+    <h2>تسجيل الدخول</h2>
+    <input type="text" id="loginUsername" placeholder="اسم المستخدم" />
+    <input type="password" id="loginPassword" placeholder="كلمة المرور" />
+    <button id="loginBtn">دخول</button>
+    <p class="message" id="loginMessage"></p>
+
+    <script>
+        // دالة لحفظ المستخدم في localStorage (للتجربة فقط)
+        function registerUser(username, password) {
+            let users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[username]) {
+                return false; // المستخدم موجود
+            }
+            users[username] = password;
+            localStorage.setItem('users', JSON.stringify(users));
+            return true;
+        }
+
+        // دالة للتحقق من بيانات الدخول
+        function loginUser(username, password) {
+            let users = JSON.parse(localStorage.getItem('users') || '{}');
+            return users[username] && users[username] === password;
+        }
+
+        document.getElementById('registerBtn').onclick = function () {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const message = document.getElementById('regMessage');
+
+            if (!username || !password) {
+                message.textContent = 'يرجى إدخال اسم المستخدم وكلمة المرور.';
+                return;
+            }
+
+            if (registerUser(username, password)) {
+                message.style.color = 'green';
+                message.textContent = 'تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.';
+                document.getElementById('regUsername').value = '';
+                document.getElementById('regPassword').value = '';
+            } else {
+                message.style.color = 'red';
+                message.textContent = 'اسم المستخدم موجود بالفعل.';
+            }
+        };
+
+        document.getElementById('loginBtn').onclick = function () {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const message = document.getElementById('loginMessage');
+
+            if (!username || !password) {
+                message.textContent = 'يرجى إدخال اسم المستخدم وكلمة المرور.';
+                return;
+            }
+
+            if (loginUser(username, password)) {
+                message.style.color = 'green';
+                message.textContent = 'تم تسجيل الدخول بنجاح! مرحباً بك، ' + username;
+                // هنا يمكنك توجيه المستخدم لصفحة أخرى أو إظهار المحتوى الخاص به
+            } else {
+                message.style.color = 'red';
+                message.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة.';
+            }
+        };
+    </script>
+
+</body>
+
+</html>
+
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vie Faucet - الفوسيت الأفضل للعملات الرقمية</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f9f7;
+            color: #333;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #3eb081;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(62, 176, 129, 0.2);
+        }
+
+        button {
+            background-color: #3eb081;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #32936f;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>عجلة العملات</title>
+        <style>
+            body {
+                text-align: center;
+                font-family: Arial, sans-serif;
+                background: #f8f8f8;
+            }
+
+            #wheel {
+                margin: 20px auto;
+                width: 300px;
+                height: 300px;
+                border: 10px solid #333;
+                border-radius: 50%;
+                position: relative;
+            }
+
+            .segment {
+                width: 50%;
+                height: 50%;
+                position: absolute;
+                transform-origin: 100% 100%;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 18px;
+                cursor: pointer;
+            }
+
+            #pointer {
+                position: absolute;
+                left: 50%;
+                top: -20px;
+                transform: translateX(-50%);
+                font-size: 24px;
+            }
+        </style>
+    </head>
+    <!DOCTYPE html>
+    <html lang="ar">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>🎰 عجلة DOGE نقاط</title>
+        <style>
+            body {
+                text-align: center;
+                font-family: Arial, sans-serif;
+                background: #f8f8f8;
+                padding: 40px;
+            }
+
+            #wheel {
+                margin: auto;
+                width: 350px;
+                height: 350px;
+                border: 8px solid #222;
+                border-radius: 50%;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .segment {
+                position: absolute;
+                width: 50%;
+                height: 50%;
+                transform-origin: 100% 100%;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                padding-right: 10px;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            #pointer {
+                font-size: 30px;
+                margin-bottom: -20px;
+                color: #d00;
+            }
+
+            button {
+                font-size: 20px;
+                padding: 10px 20px;
+                margin-top: 30px;
+                cursor: pointer;
+            }
+
+            #result {
+                margin-top: 20px;
+                font-size: 22px;
+                font-weight: bold;
+                color: #006400;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <h2>🎡 عجلة نقاط DOGE</h2>
+        <div id="pointer">▼</div>
+        <div id="wheel"></div>
+        <button onclick="spin()">🔄 ادر العجلة</button>
+
+        <p id="result"></p>
+
+        <script>
+            const prizes = [
+                "DOGE 1000 نقاط",
+                "DOGE 15000 نقاط",
+                "DOGE 20000 نقاط",
+                "DOGE 1000 نقاط",
+                "DOGE 15000 نقاط",
+                "DOGE 20000 نقاط"
+            ];
+
+            const colors = ["#FFB74D", "#81C784", "#4DD0E1", "#BA68C8", "#F06292", "#AED581"];
+            const wheel = document.getElementById("wheel");
+
+            prizes.forEach((text, i) => {
+                const seg = document.createElement("div");
+                seg.className = "segment";
+                seg.style.background = colors[i % colors.length];
+                seg.style.transform = `rotate(${i * (360 / prizes.length)}deg) skewY(-60deg)`;
+                seg.innerHTML = `<span style="transform: skewY(60deg) rotate(${90 - i * (360 / prizes.length)}deg);">${text}</span>`;
+                wheel.appendChild(seg);
+            });
+
+            function spin() {
+                document.getElementById("result").textContent = "";
+                const degree = Math.random() * 360 + 3600;
+                wheel.style.transition = "transform 4s ease-out";
+                wheel.style.transform = `rotate(${degree}deg)`;
+
+                setTimeout(() => {
+                    const actual = degree % 360;
+                    const segmentSize = 360 / prizes.length;
+                    const idx = Math.floor((360 - actual) / segmentSize) % prizes.length;
+                    document.getElementById("result").textContent = "🎉 حصلت على: " + prizes[idx];
+                }, 4000);
+            }
+        </script>
+
+    </body>
+
+    </html>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script>
+        async function connectWallet() {
+            if (window.ethereum) {
+                await ethereum.request({ method: 'eth_requestAccounts' });
+                window.web3 = new Web3(ethereum);
+                const accounts = await web3.eth.getAccounts();
+                console.log("Connected:", accounts[0]);
+            } else {
+                alert("Please install MetaMask!");
+            }
+        }
+    </script>
+    <button onclick="connectWallet()">ربط محفظتك</button>
