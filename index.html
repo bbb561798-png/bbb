@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عجلة نقاط DEGO</title>
+<style>
+  body {
+    background: #121212;
+    color: #fff;
+    <!DOCTYPE html>
+    <html lang="ar">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>عجلة ونظام تحويل DEGO</title>
+      <style>
+        body { background: #121212; color: #fff; font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 720px; margin: auto; }
+        .wheel-container { width: 300px; height: 300px; margin: 10px auto; border-radius: 50%; overflow: hidden; border: 8px solid #444; position: relative; }
+        .wheel { width: 100%; height: 100%; transition: transform 4s ease-out; }
+        .slice { position: absolute; width: 50%; height: 50%; transform-origin: 100% 100%; clip-path: polygon(0 0, 100% 0, 0 100%); display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; }
+        .slice:nth-child(1) { background: #1e90ff; transform: rotate(0deg); }
+        .slice:nth-child(2) { background: #ff7f50; transform: rotate(90deg); }
+        .slice:nth-child(3) { background: #32cd32; transform: rotate(180deg); }
+        .slice:nth-child(4) { background: #ffd700; transform: rotate(270deg); }
+        input, button { padding: 10px; margin: 8px; font-size: 16px; border-radius: 5px; }
+        button { background: #28a745; border: none; color: #fff; cursor: pointer; }
+        #message { margin-top: 12px; font-size: 18px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2>🎡 عجلة نقاط DEGO</h2>
+        <div class="wheel-container">
+          <div class="wheel" id="wheel">
+            <div class="slice">1000 DEGO</div>
+            <div class="slice">2000 DEGO</div>
+            <div class="slice">3000 DEGO</div>
+            <div class="slice">500 DEGO</div>
+          </div>
+        </div>
+        <button id="spinBtn">🚀 دور العجلة!</button>
+        <div id="balance">رصيدك: 0.00000000 DEGO</div>
+        <p id="result"></p>
+
+        <hr style="margin:24px 0; border-color:#333">
+
+        <h2>🚀 تحويل نقاط DEGO إلى FaucetPay</h2>
+        <label>البريد الذي تريد التحويل إليه:</label><br>
+        <input type="email" id="emailTo" placeholder="example@mail.com"><br>
+        <label>المبلغ بالـ DEGO:</label><br>
+        <input type="number" id="amount" placeholder="1000"><br>
+        <button id="transferBtn">💸 تحويل الآن</button>
+        <p id="message"></p>
+      </div>
+
+      <script>
+        // ====== Wheel logic ======
+        const wheel = document.getElementById("wheel");
+        const spinBtn = document.getElementById("spinBtn");
+        const resultDisplay = document.getElementById("result");
+        const balanceDisplay = document.getElementById("balance");
+        let balance = 0;
+        const rewards = [1000, 2000, 3000, 500];
+
+        spinBtn.addEventListener("click", () => {
+          spinBtn.disabled = true;
+          resultDisplay.textContent = "🔄 جاري الدوران...";
+          const randomSpin = Math.floor(Math.random() * 360) + 360 * 6;
+          wheel.style.transform = `rotate(${randomSpin}deg)`;
+          setTimeout(() => {
+            const degrees = randomSpin % 360;
+            const part = Math.floor(degrees / 90);
+            const prize = rewards[part];
+            balance += prize;
+            resultDisplay.textContent = `🎉 حصلت على: ${prize} DEGO!`;
+            balanceDisplay.textContent = `رصيدك: ${balance}.00000000 DEGO`;
+            spinBtn.disabled = false;
+          }, 4000);
+        });
+
+        // ====== Transfer logic ======
+        const transferBtn = document.getElementById('transferBtn');
+        const message = document.getElementById('message');
+
+        transferBtn.addEventListener('click', sendTransfer);
+
+        function sendTransfer() {
+          const email = document.getElementById("emailTo").value.trim();
+          const amount = document.getElementById("amount").value.trim();
+
+          if (!email || !amount) {
+            message.textContent = "❌ الرجاء إدخال البيانات!";
+            return;
+          }
+
+          transferBtn.disabled = true;
+          message.textContent = "⏳ جاري إرسال طلب التحويل...";
+
+          // تأكد من تعديل هذا الـURL إذا لديك سيرفر حقيقي أو API خارجي
+          const endpoint = "http://localhost:3000/transfer";
+
+          fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, amount })
+          })
+          .then(async res => {
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.message || 'خطأ في الاستجابة');
+            return data;
+          })
+          .then(data => {
+            if (data.success) {
+              message.textContent = "✅ " + data.message;
+            } else {
+              message.textContent = "❌ " + (data.message || 'فشل التحويل');
+            }
+          })
+          .catch(err => {
+            console.error('Transfer error:', err);
+            message.textContent = "❌ خطأ في الاتصال بالخادم";
+          })
+          .finally(() => { transferBtn.disabled = false; });
+        }
+      </script>
+    </body>
+    </html>
+
